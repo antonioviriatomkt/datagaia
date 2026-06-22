@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Datagaia — Location Intelligence & Predictive Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0a1c2e;
+    --ink-2:#10263b;
+    --teal:#15bda3;
+    --teal-d:#0e9a86;
+    --blue:#2f7df6;
+    --mist:#f4f8fa;
+    --line:#e3ecf1;
+    --grey:#5a7184;
+    --white:#ffffff;
+    --grad:linear-gradient(115deg,#15bda3 0%,#2f7df6 100%);
+    --radius:16px;
+    --shadow:0 18px 50px -20px rgba(10,28,46,.28);
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:'Manrope',sans-serif;color:var(--ink);line-height:1.12;letter-spacing:-.02em}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .eyebrow{font-family:'Manrope';font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-d)}
+  .btn{display:inline-block;font-family:'Manrope';font-weight:700;font-size:15px;padding:13px 24px;border-radius:999px;transition:.18s;cursor:pointer;border:none}
+  .btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px -10px rgba(47,125,246,.6)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 30px -12px rgba(47,125,246,.7)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal-d)}
+  .btn-light{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.28)}
+  .btn-light:hover{background:rgba(255,255,255,.2)}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Manrope';font-weight:800;font-size:21px;letter-spacing:-.03em}
+  .logo .dot{width:26px;height:26px;border-radius:50%;background:var(--grad);position:relative;display:inline-block}
+  .logo .dot::after{content:"";position:absolute;inset:7px;border-radius:50%;border:2px solid rgba(255,255,255,.85)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-weight:500;font-size:15px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--teal-d)}
+  .nav-cta{display:flex;gap:12px;align-items:center}
+  .menu-btn{display:none;background:none;border:none;font-size:26px;cursor:pointer;color:var(--ink)}
+
+  /* HERO */
+  .hero{position:relative;background:radial-gradient(120% 130% at 80% -10%,#163a5c 0%,var(--ink) 55%);color:#fff;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(80% 70% at 70% 10%,#000 30%,transparent 75%);opacity:.6}
+  .hero-inner{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:84px 0 92px}
+  .hero h1{font-size:54px;font-weight:800;color:#fff;margin:18px 0 20px}
+  .hero p.lead{font-size:19px;color:#c4d6e4;max-width:540px;margin-bottom:30px}
+  .hero .eyebrow{color:#7fe6d4}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-vis{position:relative;height:380px;border-radius:20px;background:linear-gradient(160deg,#0e2840,#0a1c2e);border:1px solid rgba(127,230,212,.22);box-shadow:var(--shadow);overflow:hidden}
+  .hero-vis .ping{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--teal)}
+  .hero-vis .ping::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--teal);animation:pulse 2.4s infinite ease-out}
+  @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+  .hero-vis .lbl{position:absolute;font-size:12px;font-family:'Manrope';font-weight:600;background:rgba(255,255,255,.95);color:var(--ink);padding:5px 10px;border-radius:8px;box-shadow:0 6px 16px -6px rgba(0,0,0,.4)}
+  .map-lines{position:absolute;inset:0;opacity:.5;background-image:linear-gradient(rgba(127,230,212,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(127,230,212,.10) 1px,transparent 1px);background-size:38px 38px}
+
+  /* LOGO WALL */
+  .logos{padding:34px 0;border-bottom:1px solid var(--line);background:var(--white)}
+  .logos p{text-align:center;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);font-weight:600;margin-bottom:18px}
+  .logo-row{display:flex;justify-content:center;gap:46px;flex-wrap:wrap;align-items:center}
+  .logo-row span{font-family:'Manrope';font-weight:700;font-size:19px;color:#9fb2c0;opacity:.85}
+
+  /* SECTIONS */
+  section.block{padding:88px 0}
+  .sec-head{max-width:680px;margin:0 auto 52px;text-align:center}
+  .sec-head h2{font-size:40px;font-weight:800;margin:14px 0 14px}
+  .sec-head p{font-size:18px;color:var(--grey)}
+
+  /* SOLUTION CARDS */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px;transition:.2s}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:transparent}
+  .card .ic{width:52px;height:52px;border-radius:13px;background:var(--mist);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+  .card .ic svg{width:26px;height:26px;stroke:var(--teal-d)}
+  .card h3{font-size:21px;margin-bottom:10px}
+  .card p{color:var(--grey);font-size:15px;margin-bottom:18px}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+  .card li{font-size:14.5px;color:var(--ink-2);padding-left:24px;position:relative}
+  .card li::before{content:"";position:absolute;left:0;top:7px;width:13px;height:13px;border-radius:50%;background:var(--grad);opacity:.9}
+  .card a.more{font-family:'Manrope';font-weight:700;font-size:14px;color:var(--teal-d)}
+
+  /* FEATURE ALTERNATING */
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:74px}
+  .feat:last-child{margin-bottom:0}
+  .feat.rev .feat-txt{order:2}
+  .feat-txt h3{font-size:30px;font-weight:800;margin:12px 0 16px}
+  .feat-txt p{color:var(--grey);font-size:16.5px;margin-bottom:14px}
+  .feat-txt .key{color:var(--ink);font-weight:600}
+  .feat-vis{height:330px;border-radius:18px;border:1px solid var(--line);background:var(--mist);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .feat-vis .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(21,189,163,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(21,189,163,.08) 1px,transparent 1px);background-size:34px 34px}
+  .chip{position:absolute;font-family:'Manrope';font-weight:600;font-size:12px;background:#fff;border:1px solid var(--line);padding:6px 11px;border-radius:9px;box-shadow:0 8px 18px -10px rgba(10,28,46,.3)}
+  .blob{position:absolute;border-radius:50%;background:var(--grad);opacity:.16;filter:blur(2px)}
+  .pin{position:absolute;width:12px;height:12px;border-radius:50% 50% 50% 0;background:var(--teal-d);transform:rotate(-45deg);box-shadow:0 0 0 4px rgba(21,189,163,.18)}
+
+  /* STATS */
+  .stats{background:var(--ink);color:#fff;padding:64px 0}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center}
+  .stat .n{font-family:'Manrope';font-weight:800;font-size:44px;background:linear-gradient(115deg,#7fe6d4,#7fb2ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat p{color:#a9c0d2;font-size:14.5px;margin-top:6px}
+
+  /* GEOPROCESS / API band */
+  .api{background:var(--mist)}
+  .api-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:14px}
+  .api-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:22px}
+  .api-card h4{font-size:16px;margin-bottom:7px}
+  .api-card p{font-size:13.5px;color:var(--grey)}
+  .api-card .tag{display:inline-block;font-family:'Manrope';font-weight:700;font-size:11px;color:var(--teal-d);background:rgba(21,189,163,.1);padding:3px 9px;border-radius:6px;margin-bottom:13px}
+
+  /* TESTIMONIAL */
+  .quote{max-width:820px;margin:0 auto;text-align:center}
+  .quote blockquote{font-family:'Manrope';font-weight:600;font-size:26px;line-height:1.4;letter-spacing:-.02em;margin-bottom:24px}
+  .quote .who{display:flex;align-items:center;justify-content:center;gap:13px}
+  .quote .av{width:46px;height:46px;border-radius:50%;background:var(--grad)}
+  .quote .who div{text-align:left}
+  .quote .who strong{display:block;font-family:'Manrope';font-size:15px}
+  .quote .who span{font-size:13px;color:var(--grey)}
+
+  /* CTA */
+  .cta{background:radial-gradient(120% 140% at 20% 0%,#163a5c,var(--ink));color:#fff;border-radius:24px;padding:64px;text-align:center;margin:0 24px}
+  .cta h2{color:#fff;font-size:38px;font-weight:800;margin-bottom:14px}
+  .cta p{color:#bcd0df;font-size:18px;max-width:520px;margin:0 auto 28px}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#9db4c6;padding:64px 0 30px;margin-top:88px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px;padding-bottom:38px;border-bottom:1px solid rgba(255,255,255,.1)}
+  footer h5{font-family:'Manrope';color:#fff;font-size:14px;letter-spacing:.04em;margin-bottom:16px}
+  footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  footer a{font-size:14px;color:#9db4c6}
+  footer a:hover{color:#7fe6d4}
+  .foot-logo{color:#fff;font-family:'Manrope';font-weight:800;font-size:21px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:22px;font-size:13px;color:#6f879a;flex-wrap:wrap;gap:10px}
+  .badge{display:inline-block;font-size:11px;background:rgba(127,230,212,.12);color:#7fe6d4;font-weight:600;padding:4px 10px;border-radius:6px;margin-bottom:18px;font-family:'Manrope'}
+
+  @media(max-width:880px){
+    .hero-inner{grid-template-columns:1fr;padding:56px 0 64px}
+    .hero h1{font-size:40px}
+    .hero-vis{height:300px}
+    .nav-links,.nav-cta .btn-ghost{display:none}
+    .menu-btn{display:block}
+    .cards,.api-grid{grid-template-columns:1fr}
+    .feat{grid-template-columns:1fr;gap:28px}
+    .feat.rev .feat-txt{order:0}
+    .stats .wrap{grid-template-columns:1fr 1fr;gap:34px}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .sec-head h2{font-size:30px}
+    .cta{padding:44px 26px}
+    .cta h2{font-size:28px}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <div class="wrap">
+    <nav>
+      <a class="logo" href="#top"><span class="dot"></span>datagaia</a>
+      <div class="nav-links">
+        <a href="#solutions">Solutions</a>
+        <a href="#geomarketing">Geomarketing</a>
+        <a href="#predictive">Predictive</a>
+        <a href="#programmatic">Programmatic</a>
+        <a href="#clients">Clients</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#contact" class="btn btn-ghost">Log in</a>
+        <a href="#contact" class="btn btn-primary">Request a demo</a>
+      </div>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div>
+      <span class="eyebrow">Geomarketing · Predictive Analytics · Programmatic</span>
+      <h1>Turn the <span class="accent">where</span> in your data into your next decision.</h1>
+      <p class="lead">80% of your business data carries a location — yet most of it goes unused. Datagaia puts your customers on the map, predicts what they'll do next, and activates the right message in the right place.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Talk to an expert</a>
+        <a href="#solutions" class="btn btn-light">Explore solutions</a>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="map-lines"></div>
+      <span class="ping" style="left:24%;top:38%"></span>
+      <span class="ping" style="left:62%;top:30%"></span>
+      <span class="ping" style="left:48%;top:64%"></span>
+      <span class="ping" style="left:78%;top:60%"></span>
+      <span class="lbl" style="left:18%;top:24%">High-value cluster</span>
+      <span class="lbl" style="left:56%;top:72%">New store ?</span>
+      <span class="lbl" style="right:8%;top:40%">+18% reach</span>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO WALL -->
+<div class="logos">
+  <div class="wrap">
+    <p>Trusted by data-driven teams in retail, finance, FMCG &amp; telecom</p>
+    <div class="logo-row">
+      <span>CLIENT&nbsp;ONE</span><span>CLIENT&nbsp;TWO</span><span>CLIENT&nbsp;THREE</span><span>CLIENT&nbsp;FOUR</span><span>CLIENT&nbsp;FIVE</span>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTIONS -->
+<section class="block" id="solutions">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What we do</span>
+      <h2>One partner, from insight to activation</h2>
+      <p>We combine geographic intelligence, predictive modelling and programmatic media so your strategy doesn't stop at the dashboard — it reaches the customer.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 20l-5.4 1.5L3 6l6-2 6 2 6-2 .6 15.5L15 22l-6-2zM9 4v16M15 6v16"/></svg></div>
+        <h3>Geomarketing</h3>
+        <p>Know exactly where your customers are, who they are, and where to grow.</p>
+        <ul>
+          <li>Customer mapping &amp; segmentation</li>
+          <li>Site selection &amp; territory planning</li>
+          <li>Service areas, logistics &amp; routing</li>
+        </ul>
+        <a class="more" href="#geomarketing">See how it works →</a>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18M7 14l3-4 4 3 5-7"/></svg></div>
+        <h3>Predictive &amp; Sentiment</h3>
+        <p>Statistical models that anticipate behaviour before it happens.</p>
+        <ul>
+          <li>Churn, demand &amp; value prediction</li>
+          <li>Customer sentiment analysis</li>
+          <li>Models built on your own data</li>
+        </ul>
+        <a class="more" href="#predictive">See how it works →</a>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18M3 12h18"/></svg></div>
+        <h3>Programmatic Advertising</h3>
+        <p>Activate your insight with personalised, precisely targeted ads.</p>
+        <ul>
+          <li>Audience &amp; geofencing strategy</li>
+          <li>Automated, personalised delivery</li>
+          <li>Transparent, measurable ROI</li>
+        </ul>
+        <a class="more" href="#programmatic">See how it works →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEOMARKETING DEEP DIVE -->
+<section class="block" id="geomarketing" style="background:var(--mist)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Flagship · Geomarketing</span>
+      <h2>Location intelligence — the 5th P of your marketing mix</h2>
+      <p>Combine your business intelligence with demographic, socioeconomic and mobility data to see your customers in space — and act on it.</p>
+    </div>
+
+    <div class="feat">
+      <div class="feat-txt">
+        <span class="eyebrow">Visualize &amp; model</span>
+        <h3>See where your customers really are</h3>
+        <p class="key">Map every customer, then enrich them with demographics and spending behaviour.</p>
+        <p>We geocode your data and overlay it with socioeconomic profiles, so you stop guessing who your audience is and start seeing exactly where value concentrates — and where it's leaking away.</p>
+      </div>
+      <div class="feat-vis">
+        <div class="grid-bg"></div>
+        <div class="blob" style="width:160px;height:160px;left:18%;top:20%"></div>
+        <div class="blob" style="width:110px;height:110px;left:54%;top:48%"></div>
+        <span class="pin" style="left:30%;top:36%"></span><span class="pin" style="left:46%;top:30%"></span>
+        <span class="pin" style="left:60%;top:58%"></span><span class="pin" style="left:38%;top:62%"></span>
+        <span class="chip" style="right:10%;top:18%">Segment A · 12k</span>
+        <span class="chip" style="left:12%;bottom:14%">Avg. income index 118</span>
+      </div>
+    </div>
+
+    <div class="feat rev">
+      <div class="feat-txt">
+        <span class="eyebrow">Plan &amp; expand</span>
+        <h3>Open the right store in the right place</h3>
+        <p class="key">Site selection, sales territory design and service-area planning, backed by data.</p>
+        <p>Find optimal locations for new outlets, balance sales territories by workload and potential, and define catchment areas that avoid overlap and cannibalisation — turning expansion from intuition into a model.</p>
+      </div>
+      <div class="feat-vis">
+        <div class="grid-bg"></div>
+        <div class="blob" style="width:200px;height:200px;right:6%;top:14%"></div>
+        <span class="pin" style="left:26%;top:44%"></span>
+        <span class="chip" style="left:14%;top:20%">Catchment · 5 min</span>
+        <span class="chip" style="right:12%;bottom:16%">Best site: 94/100</span>
+        <span class="lbl" style="left:40%;top:60%;position:absolute;background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:8px;font-family:Manrope;font-weight:600;font-size:12px">Territory B</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-txt">
+        <span class="eyebrow">Operate &amp; deliver</span>
+        <h3>Move goods and messages efficiently</h3>
+        <p class="key">Location-based services, fleet logistics and route optimisation.</p>
+        <p>Use customer location to deliver timely, relevant offers, and plan your fleet to minimise cost and delivery time. The same spatial engine that finds your customers also gets your product to them.</p>
+      </div>
+      <div class="feat-vis">
+        <div class="grid-bg"></div>
+        <svg viewBox="0 0 400 300" style="position:absolute;inset:0;width:100%;height:100%"><path d="M40 240 C120 200 140 90 240 110 S360 60 370 60" fill="none" stroke="#15bda3" stroke-width="3" stroke-dasharray="7 8"/></svg>
+        <span class="pin" style="left:8%;bottom:18%"></span>
+        <span class="pin" style="right:6%;top:18%"></span>
+        <span class="chip" style="left:40%;top:30%">Route −22% cost</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEOPROCESSING APIs -->
+<section class="block api">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">For developers</span>
+      <h2>Ready-to-use geoprocessing services</h2>
+      <p>Embed spatial functionality into your own apps with web services that return JSON or XML — built on industry-standard GIS (ESRI / ArcGIS).</p>
+    </div>
+    <div class="api-grid">
+      <div class="api-card"><span class="tag">API</span><h4>Geocoding</h4><p>Convert addresses into precise longitude / latitude coordinates.</p></div>
+      <div class="api-card"><span class="tag">API</span><h4>Service Area</h4><p>Find how many people live within X minutes of any location.</p></div>
+      <div class="api-card"><span class="tag">API</span><h4>Routing</h4><p>Route customers to your stores along the optimal path.</p></div>
+      <div class="api-card"><span class="tag">API</span><h4>VRP</h4><p>Vehicle routing that minimises operating cost and delivery time.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stat"><div class="n">80%</div><p>of business data contains a spatial component</p></div>
+    <div class="stat"><div class="n">90%</div><p>of that location data sits unexploited today</p></div>
+    <div class="stat"><div class="n">5th P</div><p>location as the missing piece of your marketing mix</p></div>
+    <div class="stat"><div class="n">1</div><p>partner from insight to activation</p></div>
+  </div>
+</section>
+
+<!-- PREDICTIVE -->
+<section class="block" id="predictive">
+  <div class="wrap">
+    <div class="feat">
+      <div class="feat-txt">
+        <span class="eyebrow">Predictive Analytics &amp; Sentiment</span>
+        <h3>Know what your customers will do next</h3>
+        <p class="key">We analyse your historical and live data to build models that predict behaviour and sentiment.</p>
+        <p>From churn risk and demand forecasting to lifetime-value scoring, our statistical models turn the data you already hold into a forward view — and sentiment analysis tells you how customers feel, not just what they did.</p>
+        <a href="#contact" class="btn btn-ghost" style="margin-top:8px">Discuss a model →</a>
+      </div>
+      <div class="feat-vis">
+        <div class="grid-bg"></div>
+        <svg viewBox="0 0 400 300" style="position:absolute;inset:0;width:100%;height:100%"><polyline points="20,230 80,200 140,210 200,150 260,160 320,90 380,70" fill="none" stroke="#2f7df6" stroke-width="3"/><polyline points="320,90 380,70 380,70" fill="none" stroke="#15bda3" stroke-width="3" stroke-dasharray="6 6"/></svg>
+        <span class="chip" style="right:10%;top:16%">Forecast +</span>
+        <span class="chip" style="left:12%;bottom:16%">Sentiment 0.78</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMMATIC -->
+<section class="block" id="programmatic" style="background:var(--mist)">
+  <div class="wrap">
+    <div class="feat rev">
+      <div class="feat-txt">
+        <span class="eyebrow">Programmatic Advertising</span>
+        <h3>Reach the right person, place &amp; moment</h3>
+        <p class="key">Activate your insight with personalised, automated ad campaigns.</p>
+        <p>We translate your geomarketing and predictive models into precise audiences and geofencing strategies — then deliver personalised ads programmatically, with transparent reporting so you always know what your budget bought.</p>
+        <a href="#contact" class="btn btn-ghost" style="margin-top:8px">Plan a campaign →</a>
+      </div>
+      <div class="feat-vis">
+        <div class="grid-bg"></div>
+        <div class="blob" style="width:150px;height:150px;left:20%;top:24%"></div>
+        <span class="pin" style="left:34%;top:42%"></span><span class="pin" style="left:56%;top:54%"></span>
+        <span class="chip" style="right:12%;top:18%">CTR +31%</span>
+        <span class="chip" style="left:14%;bottom:16%">Geofence active</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="block" id="clients">
+  <div class="wrap quote">
+    <span class="eyebrow">Client story</span>
+    <blockquote>“Datagaia showed us where our next three stores should open — on a map our whole board could understand. The expansion paid for itself in under a year.”</blockquote>
+    <div class="who">
+      <div class="av"></div>
+      <div><strong>[Client name]</strong><span>Head of Expansion · [Company] — placeholder, replace with a real quote</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding-bottom:0">
+  <div class="cta" id="contact">
+    <h2>See your business on the map</h2>
+    <p>Book a short call with our team and we'll show you what your own data reveals about where to grow next.</p>
+    <a href="mailto:hello@datagaia.io" class="btn btn-primary">Request a demo</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo"><span class="dot" style="width:24px;height:24px"></span>datagaia</div>
+        <p style="font-size:14px;max-width:260px">Geographic intelligence, predictive analytics and programmatic advertising — transparent results from your data.</p>
+      </div>
+      <div>
+        <h5>Solutions</h5>
+        <ul>
+          <li><a href="#geomarketing">Geomarketing</a></li>
+          <li><a href="#predictive">Predictive Analytics</a></li>
+          <li><a href="#programmatic">Programmatic Advertising</a></li>
+          <li><a href="#geomarketing">Geoprocessing APIs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#clients">Clients</a></li>
+          <li><a href="#top">Cases</a></li>
+          <li><a href="#top">Our team</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Get in touch</h5>
+        <ul>
+          <li><a href="mailto:hello@datagaia.io">hello@datagaia.io</a></li>
+          <li><a href="#contact">Request a demo</a></li>
+          <li><a href="#top">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© Datagaia 2026 — prototype mockup</span>
+      <span>Geomarketing · Predictive Analytics · Programmatic Advertising</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.menu-btn').addEventListener('click',function(){
+    var n=document.querySelector('.nav-links');
+    var open=n.style.display==='flex';
+    n.style.display=open?'none':'flex';
+    if(!open){n.style.position='absolute';n.style.flexDirection='column';n.style.top='70px';n.style.left='0';n.style.right='0';n.style.background='#fff';n.style.padding='18px 24px';n.style.gap='14px';n.style.borderBottom='1px solid var(--line)'}
+  });
+</script>
+</body>
+</html>
