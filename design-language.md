@@ -51,8 +51,9 @@ All colors as CSS custom properties. These map cleanly into a Tailwind theme (se
 :root {
   /* Brand accent — the signature Gaia green (sampled #1DD282) */
   --gaia-green:      #1DD282;  /* primary accent, CTAs, highlights, pings */
-  --gaia-green-600:  #15b974;  /* hover / pressed */
-  --gaia-green-700:  #0f9b60;  /* AA-safe green text on light bg */
+  --gaia-green-600:  #15b974;  /* hover / pressed (non-text) */
+  --gaia-green-700:  #0f9b60;  /* non-text only: pin fill, focus ring (~3.5:1, NOT AA for text) */
+  --gaia-ink:        #0b7a48;  /* AA-safe green TEXT on light (5.40:1 white / 4.95:1 mist) */
   --gaia-green-300:  #6fe3b1;  /* accents on dark surfaces, light strokes */
   --gaia-green-tint: #e7faf1;  /* faint green wash / icon chip backgrounds */
 
@@ -97,7 +98,7 @@ Keep the prototype's gradient available, but only for **decorative / data-viz** 
 | Alternating section background | `--mist` | every other `section` for rhythm |
 | Dark sections (hero, stats band, footer, CTA) | `--ink` | the "data ground" |
 | Primary action (buttons, key links) | `--gaia-green` → `--gaia-green-600` hover | one consistent green CTA everywhere |
-| Green text on light | `--gaia-green-700` only | `#1DD282` fails AA as text on white — never use raw green for body/link text |
+| Green text on light | `--gaia-ink` (#0b7a48) | both `#1DD282` (~1.7:1) and `--gaia-green-700` (~3.5:1) fail AA as text; use `--gaia-ink` for eyebrows/links |
 | Hairlines / card borders | `--line` | 1px |
 | Map/grid overlays | green at low alpha | see §6 |
 
@@ -105,8 +106,8 @@ Keep the prototype's gradient available, but only for **decorative / data-viz** 
 
 - **Body text:** `--text` `#1f2421` on `--white`/`--mist` → passes AA/AAA. ✅
 - **On dark:** `--white` and `--text-invert-muted` on `--ink` `#1f2421` → AA. ✅ (This is why dark sections use `--ink`, deeper than the legacy `#323232`, which is borderline for muted text.)
-- **Green as text:** raw `#1DD282` on white ≈ 1.7:1 — **fails**. Use `--gaia-green-700` `#0f9b60` (≈ 3.4:1, OK for large/bold ≥18px and UI; for small body links prefer `--text` underlined). Never set small grey-on-green or green-on-grey.
-- **Green button:** white text on `#1DD282` is also low-contrast — for primary buttons use **dark ink text on green** (`--ink` on `--gaia-green`) which passes AA, OR a `--gaia-green-700` fill with white text. Pick one and standardize (recommend: **dark-ink-on-green** — it's distinctive and brand-faithful).
+- **Green as text:** raw `#1DD282` (≈1.7:1) and `--gaia-green-700` `#0f9b60` (≈3.5:1) both **fail** AA for text. Use **`--gaia-ink` `#0b7a48`** (5.40:1 on white / 4.95:1 on mist) for ALL green text — eyebrows, card links, ghost/nav hovers. Keep `--gaia-green-700` for non-text only (pin fill, focus ring, icon strokes — the 3:1 bar). Never set small grey-on-green or green-on-grey.
+- **Green button:** white-on-green is low-contrast — primary buttons use **dark ink text on green** (`--ink` on `--gaia-green` = 7.95:1, passes AA). This is the standard; don't use white-on-green or white-on-`gaia-700` (both fail).
 - Always pair color with a non-color cue (icon, underline) for state.
 
 ---
@@ -143,7 +144,7 @@ Load via `next/font` (self-hosted, no layout shift). Weights: Manrope 400/600/70
 
 ### 3.3 Rules
 
-- **Eyebrows are the brand fingerprint:** Manrope 700, UPPERCASE, `+0.14em` tracking, in `--gaia-green-700` (light bg) or `--gaia-green-300` (dark bg). Use above every section H2 and feature H3.
+- **Eyebrows are the brand fingerprint:** Manrope 700, UPPERCASE, `+0.14em` tracking, in `--gaia-ink` (light bg) or `--gaia-green-300` (dark bg). Use above every section H2 and feature H3.
 - **One `<h1>` per page** (SEO/AEO requirement). Logical heading order.
 - Headings in `--font-display` with negative tracking; body in `--font-body`.
 - Body measure: max ~68ch. Lead paragraphs ~540–680px wide.
@@ -232,14 +233,14 @@ These are what make it *Datagaia* and not a generic SaaS template. They come str
 
 ### Buttons
 - **Primary:** `--gaia-green` fill, **`--ink` text** (Manrope 700, 15px), pill `border-radius:999px`, padding `13px 24px`. Hover → `--gaia-green-600`, `translateY(-2px)`, soft green shadow. *(Dark-ink-on-green chosen for AA; see §2.4.)*
-- **Secondary (ghost):** transparent, `1.5px solid var(--line)`, `--text`. Hover → green border + `--gaia-green-700` text.
+- **Secondary (ghost):** transparent, `1.5px solid var(--line)`, `--text`. Hover → green border + `--gaia-ink` text.
 - **On-dark (light ghost):** `rgba(255,255,255,.12)` fill, `1.5px solid rgba(255,255,255,.28)`, white text.
 - **One primary CTA everywhere:** "Request a demo" / "Talk to an expert" → contact. (Brief + both competitors enforce single-CTA discipline.)
 
 ### Cards (solution / service)
 - `--white` bg, `1px solid var(--line)`, `--radius` 16px, padding `32px 28px`.
 - Hover: `translateY(-4px)`, `--shadow`, border → transparent.
-- Anatomy: icon chip (52px, `--mist` or `--gaia-green-tint` bg, green stroke icon) → H3 title → muted intro → green-bulleted list → "See how it works →" link in `--gaia-green-700`.
+- Anatomy: icon chip (52px, `--mist` or `--gaia-green-tint` bg, green stroke icon) → H3 title → muted intro → green-bulleted list → "See how it works →" link in `--gaia-ink`.
 - **Bullets:** small green dot (`--gaia-green`) leading each item.
 
 ### Icon chips
@@ -263,7 +264,7 @@ These are what make it *Datagaia* and not a generic SaaS template. They come str
 
 ### Header (nav)
 - Sticky, translucent `rgba(255,255,255,.86)` + `backdrop-filter: blur(12px)`, `--line` bottom border, height 70px.
-- Globe mark + `datagaia` wordmark · nav links (Manrope 500, 15px, hover → `--gaia-green-700`) · right: ghost secondary + primary CTA.
+- Globe mark + `datagaia.io` wordmark · nav links (Manrope 500, 15px, hover → `--gaia-ink`) · right: ghost secondary + primary CTA.
 - Mobile: hamburger → dropdown panel (this is the one allowed client component).
 - *(Consider a dark header variant over the dark hero, like the live site, then sticky-light on scroll — optional polish.)*
 
@@ -292,7 +293,7 @@ Map tokens into `tailwind.config.ts`:
 theme: {
   extend: {
     colors: {
-      gaia: { DEFAULT:'#1DD282', 600:'#15b974', 700:'#0f9b60', 300:'#6fe3b1', tint:'#e7faf1' },
+      gaia: { DEFAULT:'#1DD282', 600:'#15b974', 700:'#0f9b60', ink:'#0b7a48', 300:'#6fe3b1', tint:'#e7faf1' },
       ink:  { DEFAULT:'#1f2421', 2:'#2a312d', char:'#323232' },
       mist: '#f5f5f5', line:'#e4e9e7',
       muted:'#5d6b66',
@@ -334,7 +335,7 @@ theme: {
 
 ```css
 :root{
-  --gaia-green:#1DD282; --gaia-green-600:#15b974; --gaia-green-700:#0f9b60;
+  --gaia-green:#1DD282; --gaia-green-600:#15b974; --gaia-green-700:#0f9b60; --gaia-ink:#0b7a48;
   --gaia-green-300:#6fe3b1; --gaia-green-tint:#e7faf1;
   --ink:#1f2421; --ink-2:#2a312d; --char:#323232;
   --white:#ffffff; --mist:#f5f5f5; --line:#e4e9e7;
