@@ -1,0 +1,40 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Datagaia" style="color:#1DD282">
+  <defs>
+    <clipPath id="dg-anim-clip">
+      <circle cx="32" cy="32" r="27.8"/>
+    </clipPath>
+    <style>
+      .dg-draw{
+        stroke:currentColor; stroke-width:2.4; stroke-linecap:round; fill:none;
+        stroke-dasharray:1; stroke-dashoffset:1;          /* pathLength=1 → normalized */
+        animation:dg-draw .55s ease-out forwards;
+      }
+      @keyframes dg-draw{ to{ stroke-dashoffset:0; } }
+
+      /* sequence: ring first, then meridians, then parallels */
+      .dg-ring{ animation-duration:.7s; animation-delay:0s; }
+      .dg-m1{ animation-delay:.45s; }
+      .dg-m2{ animation-delay:.58s; }
+      .dg-m3{ animation-delay:.71s; }
+      .dg-p1{ animation-delay:.86s; }
+      .dg-p2{ animation-delay:.99s; }
+
+      /* accessibility: no motion → show the finished mark immediately */
+      @media (prefers-reduced-motion: reduce){
+        .dg-draw{ animation:none; stroke-dashoffset:0; }
+      }
+    </style>
+  </defs>
+
+  <!-- graticule (clipped to the globe) -->
+  <g clip-path="url(#dg-anim-clip)">
+    <line class="dg-draw dg-m1" pathLength="1" x1="14" y1="0"  x2="14" y2="64"/>
+    <line class="dg-draw dg-m2" pathLength="1" x1="32" y1="0"  x2="32" y2="64"/>
+    <line class="dg-draw dg-m3" pathLength="1" x1="50" y1="0"  x2="50" y2="64"/>
+    <line class="dg-draw dg-p1" pathLength="1" x1="0"  y1="19" x2="64" y2="19"/>
+    <line class="dg-draw dg-p2" pathLength="1" x1="0"  y1="45" x2="64" y2="45"/>
+  </g>
+
+  <!-- globe ring -->
+  <circle class="dg-draw dg-ring" pathLength="1" cx="32" cy="32" r="29"/>
+</svg>

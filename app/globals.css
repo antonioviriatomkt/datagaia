@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Datagaia design tokens  (see design-language.md §11)
+   Tailwind v4 CSS-first config. Color literals → @theme,
+   font-family vars (from next/font) → @theme inline.
+   ============================================================ */
+@theme {
+  /* Brand accent — the signature Gaia green */
+  --color-gaia: #1dd282;
+  --color-gaia-600: #15b974;
+  --color-gaia-700: #0f9b60; /* non-text use: pin fill, focus ring (3:1) */
+  --color-gaia-ink: #0b7a48; /* AA-safe green TEXT on light (5.40:1 white / 4.95:1 mist) */
+  --color-gaia-300: #6fe3b1;
+  --color-gaia-tint: #e7faf1;
+
+  /* Dark surfaces — charcoal "ink" family */
+  --color-ink: #1f2421;
+  --color-ink-2: #2a312d;
+  --color-char: #323232;
+
+  /* Light surfaces + text */
+  --color-mist: #f5f5f5;
+  --color-line: #e4e9e7;
+  --color-muted: #5d6b66; /* secondary text on light */
+  --color-ink-muted: #b7c6c0; /* secondary text on dark */
+
+  /* Radii (custom names so Tailwind defaults aren't clobbered) */
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --radius-chip: 10px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-lift: 0 18px 50px -20px rgba(31, 36, 33, 0.28);
+  --shadow-chip: 0 8px 18px -10px rgba(31, 36, 33, 0.3);
+}
+
+@theme inline {
+  --font-display: var(--font-manrope), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+}
+
+:root {
+  --maxw: 1180px;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  ::selection {
+    background: var(--color-gaia);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gaia-700);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+.wrap {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* Skip link (a11y) */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: var(--radius-chip);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Map-grid overlays (gaia + data motif) */
+.map-grid-dark {
+  /* gaia-green-300 (#6fe3b1) at low alpha — green-first, not the teal #7fe6d4 */
+  background-image:
+    linear-gradient(rgba(111, 227, 177, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 227, 177, 0.12) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+.map-grid-light {
+  /* gaia-green (#1dd282) at low alpha — green-first, not the teal #15bda3 */
+  background-image:
+    linear-gradient(rgba(29, 210, 130, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 210, 130, 0.09) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+/* ============================================================
+   Brand logo draw-in animation (inline SVG mark)
+   ============================================================ */
+.logo-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: logo-draw 0.55s ease-out forwards;
+}
+.logo-draw-ring {
+  animation-duration: 0.7s;
+}
+.logo-draw-m1 { animation-delay: 0.45s; }
+.logo-draw-m2 { animation-delay: 0.58s; }
+.logo-draw-m3 { animation-delay: 0.71s; }
+.logo-draw-p1 { animation-delay: 0.86s; }
+.logo-draw-p2 { animation-delay: 0.99s; }
+
+@keyframes logo-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Pulsing location ping */
+.ping-ring {
+  animation: ping-pulse 2.4s infinite ease-out;
+}
+@keyframes ping-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Reduced motion — snap everything to its resting state
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .logo-draw {
+    stroke-dashoffset: 0;
+  }
+}

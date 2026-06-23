@@ -1,0 +1,17 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Datagaia" style="color:#1DD282">
+  <defs>
+    <clipPath id="dg-globe-clip">
+      <circle cx="32" cy="32" r="27.8"/>
+    </clipPath>
+  </defs>
+  <!-- graticule (clipped to the globe) -->
+  <g clip-path="url(#dg-globe-clip)" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+    <line x1="14" y1="0" x2="14" y2="64"/>
+    <line x1="32" y1="0" x2="32" y2="64"/>
+    <line x1="50" y1="0" x2="50" y2="64"/>
+    <line x1="0" y1="19" x2="64" y2="19"/>
+    <line x1="0" y1="45" x2="64" y2="45"/>
+  </g>
+  <!-- globe ring -->
+  <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="2.4"/>
+</svg>
